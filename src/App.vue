@@ -5,6 +5,8 @@
     <Navbar />
     <Hero />
     <Marquee />
+    <Merch />
+    <Marquee />
     <Lineup />
     <Marquee />
     <About />
@@ -19,6 +21,7 @@ import Navbar from './components/Navbar.vue';
 import Hero from './components/Hero.vue';
 import About from './components/About.vue';
 import Lineup from './components/Lineup.vue';
+import Merch from './components/Merch.vue';
 // import Ticket from './components/Ticket.vue';
 import Footer from './components/Footer.vue';
 import Marquee from './components/Marquee.vue';

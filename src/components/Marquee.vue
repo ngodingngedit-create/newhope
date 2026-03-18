@@ -14,13 +14,13 @@
 <style scoped>
 .marquee-container {
   overflow: hidden;
-  background-color: var(--accent-red);
-  color: rgb(0, 0, 0);
-  padding: 1rem 0;
+  background-color: #ffffff;
+  color: #000000;
+  padding: 1.25rem 0;
   display: flex;
   white-space: nowrap;
-  border-top: 2px solid #000;
-  border-bottom: 2px solid #000;
+  border-top: 1px solid #000;
+  border-bottom: 1px solid #000;
   position: relative;
   z-index: 10;
 }

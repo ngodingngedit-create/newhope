@@ -12,8 +12,9 @@
       <!-- NAV LINKS -->
       <ul class="nav-links">
         <li><a href="#beranda">BERANDA</a></li>
-        <li><a href="#tentang">TIKET</a></li>
+        <li><a href="#merch">MERCH</a></li>
         <li><a href="#lineup">LINE UP</a></li>
+        <li><a href="#tentang">TIKET</a></li>
       </ul>
 
       <!-- RIGHT ACTIONS -->
