@@ -115,8 +115,8 @@
   position: relative;
   z-index: 10;
   width: 100%;
-  max-width: 1200px; /* Diperbesar dari 900px supaya isi container bisa selebar 1200px */
-  padding: 0 2rem;
+  max-width: 1400px;
+  padding: 0 4.5%;
   padding-top: 140px; /* Diturunkan dari 80px agar konten di Hero lebih ke tengah/bawah */
   display: flex;
   flex-direction: column;

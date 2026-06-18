@@ -4,21 +4,31 @@
 
       <!-- LOGO -->
       <div class="logo-wrapper">
-        <a href="#beranda" class="brand-logo-link">
+        <a href="#beranda" class="brand-logo-link" @click.prevent="goToHome">
           <img src="/logo.png" alt="Newhope" class="brand-logo" />
         </a>
       </div>
 
       <!-- NAV LINKS -->
       <ul class="nav-links">
-        <li><a href="#beranda">BERANDA</a></li>
-        <li><a href="#merch">MERCH</a></li>
-        <li><a href="#lineup">LINE UP</a></li>
-        <li><a href="#tentang">TIKET</a></li>
+        <li><a href="#beranda" @click.prevent="goToHome">BERANDA</a></li>
+        <li><a href="#merch" @click.prevent="goToMerch">MERCH</a></li>
+        <li><a href="#lineup" @click.prevent="goToLineup">LINE UP</a></li>
+        <li><a href="#tentang" @click.prevent="goToTiket">TIKET</a></li>
       </ul>
 
       <!-- RIGHT ACTIONS -->
       <div class="nav-actions">
+        <!-- Cart button -->
+        <button class="nav-cart-btn" aria-label="Cart" @click="toggleCart">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="9" cy="21" r="1"></circle>
+            <circle cx="20" cy="21" r="1"></circle>
+            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+          </svg>
+          <span v-if="totalCartQty > 0" class="cart-badge">{{ totalCartQty }}</span>
+        </button>
+
         <!-- Search button -->
         <button class="nav-search-btn" @click="toggleSearch" :class="{ active: searchOpen }" aria-label="Search">
           <svg v-if="!searchOpen" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -67,6 +77,7 @@
 
 <script setup>
 import { ref, onMounted, onUnmounted, nextTick } from 'vue';
+import { totalCartQty, toggleCart, navigateTo } from '../store';
 
 const isScrolled = ref(false);
 const searchOpen = ref(false);
@@ -89,6 +100,47 @@ function closeSearch() {
   searchOpen.value = false;
   searchQuery.value = '';
 }
+
+const scrollToMerch = () => {
+  const el = document.getElementById('merch');
+  if (el) {
+    el.scrollIntoView({ behavior: 'smooth' });
+  }
+};
+
+const goToHome = () => {
+  if (window.location.pathname !== '/') {
+    navigateTo('/');
+  } else {
+    document.getElementById('beranda')?.scrollIntoView({ behavior: 'smooth' });
+  }
+};
+
+const goToMerch = () => {
+  navigateTo('/merchandise');
+};
+
+const goToLineup = () => {
+  if (window.location.pathname !== '/') {
+    navigateTo('/');
+    setTimeout(() => {
+      document.getElementById('lineup')?.scrollIntoView({ behavior: 'smooth' });
+    }, 100);
+  } else {
+    document.getElementById('lineup')?.scrollIntoView({ behavior: 'smooth' });
+  }
+};
+
+const goToTiket = () => {
+  if (window.location.pathname !== '/') {
+    navigateTo('/');
+    setTimeout(() => {
+      document.getElementById('tentang')?.scrollIntoView({ behavior: 'smooth' });
+    }, 100);
+  } else {
+    document.getElementById('tentang')?.scrollIntoView({ behavior: 'smooth' });
+  }
+};
 
 onMounted(() => {
   window.addEventListener('scroll', handleScroll);
@@ -206,6 +258,41 @@ onUnmounted(() => {
 .nav-search-btn.active {
   border-color: var(--text-main);
   background: rgba(255,255,255,0.08);
+}
+
+/* Cart icon button */
+.nav-cart-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 100px;
+  border: 1px solid rgba(255,255,255,0.15);
+  background: transparent;
+  color: var(--text-main);
+  cursor: pointer;
+  position: relative;
+  transition: all 0.25s ease;
+}
+.nav-cart-btn:hover {
+  border-color: var(--text-main);
+  background: rgba(255,255,255,0.08);
+}
+.cart-badge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  background: #ffffff;
+  color: #000000;
+  font-size: 0.65rem;
+  font-weight: 800;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 /* Ticket button */

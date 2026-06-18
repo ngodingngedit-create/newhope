@@ -1,170 +1,171 @@
 <template>
   <footer class="footer">
-    <div class="container">
-      <div class="footer-grid">
-        <div class="footer-brand">
-          <img src="/logo.png" alt="Newhope Logo" class="footer-logo" />
-          <p class="footer-desc">
-            <!-- Organisasi independen yang mewadahi suara distorsi bagi skena hardcore, metal, dan sub-kultur musik ektstrem. Sejak 2020. -->
-          </p>
-        </div>
-        
-        <!-- <div class="footer-links">
-          <h4>EXPLORE</h4>
-          <ul>
-            <li><a href="#beranda">Beranda</a></li>
-            <li><a href="#tentang">Tentang Event</a></li>
-            <li><a href="#lineup">Line Up Band</a></li>
-            <li><a href="#tiket">Beli Tiket</a></li>
-          </ul>
-        </div> -->
-        
-        <div class="footer-social">
-          <!-- <h4>IKUTI KAMI</h4>
-          <div class="social-icons">
-            <a href="https://www.instagram.com/newhope.inc_official/" target="_blank" class="social-icon">IG Official</a>
-            <a href="https://www.instagram.com/newhope.inc_records/" target="_blank" class="social-icon">IG Records</a>
-          </div> -->
-        </div>
-        
-        <div class="footer-newsletter">
-          <!-- <h4>SUBSCRIBE UPDATE</h4>
-          <form @submit.prevent class="newsletter-form">
-            <input type="email" placeholder="Email Anda..." required />
-            <button type="submit" class="btn-primary">KIRIM</button>
-          </form> -->
+    <div class="footer-container container">
+      <!-- Top Section -->
+      <div class="footer-top">
+        <!-- Logo -->
+        <a href="#beranda" class="logo" @click.prevent="goToHome">
+          <img src="/logo.png" class="logo-img" alt="Newhope Logo" />
+        </a>
+
+        <!-- Social Icons Group -->
+        <div class="footer-socials">
+          <!-- Instagram Official -->
+          <a href="https://www.instagram.com/newhope.inc_official/" target="_blank" class="social-icon" aria-label="Instagram Official" title="Instagram Official">
+            <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+              <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+              <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+            </svg>
+          </a>
+
+          
+
+
+          
+
+          <!-- TikTok -->
+          <a href="https://www.tiktok.com/" target="_blank" class="social-icon" aria-label="TikTok">
+            <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5"></path>
+            </svg>
+          </a>
+
+          <!-- YouTube -->
+          <a href="https://www.youtube.com/" target="_blank" class="social-icon" aria-label="YouTube">
+            <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"></path>
+              <polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"></polygon>
+            </svg>
+          </a>
         </div>
       </div>
-      
-      <!-- <div class="footer-bottom">
-        <p>&copy; 2026 NEWHOPE INC. All Rights Reserved. Built with Kolektix.</p>
-      </div> -->
+
+      <!-- Divider line -->
+      <div class="footer-divider"></div>
+
+      <!-- Bottom Section -->
+      <div class="footer-bottom">
+        <p class="copyright">&copy; 2026 NEWHOPE INC. All rights reserved. Built with Kolektix.</p>
+      </div>
     </div>
   </footer>
 </template>
 
+<script setup>
+import { navigateTo } from '../store';
+
+const goToHome = () => {
+  if (window.location.pathname !== '/') {
+    navigateTo('/');
+  } else {
+    document.getElementById('beranda')?.scrollIntoView({ behavior: 'smooth' });
+  }
+};
+</script>
+
 <style scoped>
 .footer {
   background-color: #08090b;
-  padding: 5rem 0 2rem;
-  border-top: 1px solid rgba(255,255,255,0.05);
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  padding: 40px 0 24px;
+  position: relative;
+  z-index: 10;
 }
 
-.footer-grid {
-  display: grid;
-  grid-template-columns: 2fr 1fr 1fr 1.5fr;
-  gap: 3rem;
-  margin-bottom: 4rem;
+.footer-container {
+  width: 100%;
 }
 
-.footer-logo {
-  height: 70px;
-  filter: brightness(0) invert(1);
-  margin-bottom: 1rem;
-}
-
-.footer-desc {
-  color: var(--text-muted);
-  font-size: 0.95rem;
-  line-height: 1.6;
-}
-
-h4 {
-  color: var(--text-main);
-  font-family: var(--font-heading);
-  font-size: 1.5rem;
-  margin-bottom: 1.5rem;
-  letter-spacing: 1px;
-}
-
-.footer-links ul li {
-  margin-bottom: 0.8rem;
-}
-
-.footer-links a {
-  color: var(--text-muted);
-  transition: color 0.3s ease;
-}
-
-.footer-links a:hover {
-  color: var(--accent-red);
-  padding-left: 5px;
-}
-
-.social-icons {
+.footer-top {
   display: flex;
-  flex-direction: column;
-  gap: 1rem;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin-bottom: 24px;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+}
+
+.logo-img {
+  height: 40px;
+  width: auto;
+  object-fit: contain;
+  display: block;
+  filter: brightness(1.2);
+  transition: transform 0.3s ease;
+}
+
+.logo-img:hover {
+  transform: scale(1.03);
+}
+
+.footer-socials {
+  display: flex;
+  gap: 24px;
+  align-items: center;
 }
 
 .social-icon {
-  color: var(--text-muted);
-  transition: color 0.3s;
+  color: #a1a1aa;
+  transition: color 0.3s ease, filter 0.3s ease;
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-}
-
-.social-icon::before {
-  content: '→';
-  color: var(--accent-red);
+  justify-content: center;
 }
 
 .social-icon:hover {
-  color: var(--text-main);
+  color: #ffffff;
+  filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.6));
 }
 
-.newsletter-form {
-  display: flex;
-  gap: 0.5rem;
-}
-
-.newsletter-form input {
-  flex-grow: 1;
-  padding: 0.8rem 1rem;
-  background: var(--bg-card);
-  border: 1px solid rgba(255,255,255,0.1);
-  border-radius: 100px;
-  color: var(--text-main);
-  font-family: var(--font-body);
-}
-
-.newsletter-form input:focus {
-  outline: none;
-  border-color: var(--accent-red);
-}
-
-.newsletter-form button {
-  padding: 0.8rem 1.5rem;
+.footer-divider {
+  width: 100%;
+  height: 1px;
+  background-color: rgba(255, 255, 255, 0.05);
+  margin-bottom: 20px;
 }
 
 .footer-bottom {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.copyright {
+  font-size: 0.75rem;
+  color: #71717a;
+  letter-spacing: 0.5px;
   text-align: center;
-  padding-top: 2rem;
-  border-top: 1px solid rgba(255,255,255,0.05);
-  color: var(--text-muted);
-  font-size: 0.85rem;
 }
 
-@media (max-width: 900px) {
-  .footer-grid {
-    grid-template-columns: 1fr 1fr;
+/* Responsive Styles for Mobile */
+@media (max-width: 768px) {
+  .footer {
+    padding: 30px 0 20px;
   }
-}
-
-@media (max-width: 600px) {
-  .footer-grid {
-    grid-template-columns: 1fr;
-    text-align: center;
-  }
-  .newsletter-form {
+  .footer-top {
     flex-direction: column;
+    text-align: center;
+    gap: 16px;
+    margin-bottom: 20px;
   }
-  .footer-links a:hover {
-    padding-left: 0;
+  .logo-img {
+    height: 35px;
   }
-  .social-icons {
-    align-items: center;
+  .footer-socials {
+    gap: 20px;
+  }
+  .footer-divider {
+    margin-bottom: 16px;
+  }
+  .copyright {
+    font-size: 0.7rem;
   }
 }
 </style>

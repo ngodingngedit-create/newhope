@@ -1,6 +1,20 @@
 <script setup lang="ts">
-import { onMounted } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import { merchItems, isLoading, hasError, errorMessage, fetchMerchItems, increaseQty, decreaseQty, navigateTo } from '../store';
+
+const selectedCategory = ref('ALL');
+
+const categories = computed(() => {
+  const uniq = new Set(merchItems.value.map(item => item.category.toUpperCase()));
+  return ['ALL', ...Array.from(uniq)];
+});
+
+const filteredItems = computed(() => {
+  if (selectedCategory.value === 'ALL') {
+    return merchItems.value;
+  }
+  return merchItems.value.filter(item => item.category.toUpperCase() === selectedCategory.value);
+});
 
 const formatPrice = (price: number) => {
   return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
@@ -18,8 +32,8 @@ const navigateToDetail = (slug: string) => {
   navigateTo(`/merchandise/${slug}`);
 };
 
-const viewAllMerchandise = () => {
-  navigateTo('/merchandise');
+const goBackHome = () => {
+  navigateTo('/');
 };
 
 onMounted(() => {
@@ -28,18 +42,34 @@ onMounted(() => {
 </script>
 
 <template>
-  <section id="merch" class="merch-bw-section">
+  <section class="all-merch-section">
     <div class="container">
-      <div class="merch-header-row">
-        <div class="header-main">
-          <h2 class="title-display">COLLECTION</h2>
-          <div class="pill-accent"></div>
+
+
+      <!-- Section Title -->
+      <div class="all-merch-header">
+        <h1 class="title-display">ALL MERCHANDISE</h1>
+        <div class="pill-accent"></div>
+      </div>
+
+      <!-- Category Filters -->
+      <div v-if="!isLoading && !hasError && categories.length > 1" class="filters-wrapper">
+        <div class="filters-row">
+          <button 
+            v-for="cat in categories" 
+            :key="cat"
+            class="filter-pill"
+            :class="{ active: selectedCategory === cat }"
+            @click="selectedCategory = cat"
+          >
+            {{ cat }}
+          </button>
         </div>
       </div>
 
       <!-- Loading State (Skeleton Grid) -->
-      <div v-if="isLoading" class="merch-grid-bw">
-        <div v-for="n in 4" :key="n" class="card-bw skeleton-card">
+      <div v-if="isLoading" class="all-merch-grid">
+        <div v-for="n in 8" :key="n" class="card-bw skeleton-card">
           <div class="card-image-wrap skeleton-image skeleton-pulse"></div>
           <div class="card-content-bw">
             <div class="skeleton-tag skeleton-pulse"></div>
@@ -55,7 +85,11 @@ onMounted(() => {
       <div v-else-if="hasError">
         <div class="error-container">
           <div class="error-icon">
-            <svg viewBox="0 0 24 24" width="36" height="36" fill="none" stroke="#ff4444" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            <svg viewBox="0 0 24 24" width="36" height="36" fill="none" stroke="#ff4444" stroke-width="2">
+              <circle cx="12" cy="12" r="10"/>
+              <line x1="12" y1="8" x2="12" y2="12"/>
+              <line x1="12" y1="16" x2="12.01" y2="16"/>
+            </svg>
           </div>
           <h3 class="error-title">Gagal Memuat Koleksi</h3>
           <p class="error-message">{{ errorMessage || 'Terjadi kesalahan koneksi saat memuat merchandise.' }}</p>
@@ -63,10 +97,15 @@ onMounted(() => {
         </div>
       </div>
 
+      <!-- No Items State -->
+      <div v-else-if="filteredItems.length === 0" class="empty-state">
+        <p>Tidak ada produk dalam kategori ini.</p>
+      </div>
+
       <!-- Catalog Grid -->
-      <div v-else class="merch-grid-bw">
+      <div v-else class="all-merch-grid">
         <div 
-          v-for="(item, index) in merchItems.slice(0, 4)" 
+          v-for="(item, index) in filteredItems" 
           :key="item.id || index" 
           class="card-bw"
           @click="navigateToDetail(item.slug)"
@@ -110,36 +149,44 @@ onMounted(() => {
           </div>
         </div>
       </div>
-
-      <!-- Button Lihat Semua -->
-      <div class="view-all-wrapper" v-if="!isLoading && !hasError && merchItems.length > 4">
-        <button class="btn-view-all" @click="viewAllMerchandise">
-          <span>LIHAT SEMUA MERCHANDISE</span>
-          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 12h14m-7-7l7 7-7 7"/></svg>
-        </button>
-      </div>
     </div>
   </section>
 </template>
 
 <style scoped>
-.merch-bw-section {
+.all-merch-section {
   padding: 8rem 0;
   background-color: #000;
   color: #fff;
+  min-height: 90vh;
 }
 
-.merch-header-row {
+.btn-back-home {
+  background: transparent;
+  border: none;
+  color: #888;
   display: flex;
-  justify-content: center;
-  text-align: center;
-  margin-bottom: 5rem;
+  align-items: center;
+  gap: 0.75rem;
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  font-weight: 800;
+  cursor: pointer;
+  margin-bottom: 3rem;
+  transition: color 0.3s;
+  padding: 0;
 }
 
-.header-main {
+.btn-back-home:hover {
+  color: #fff;
+}
+
+.all-merch-header {
   display: flex;
   flex-direction: column;
   align-items: center;
+  text-align: center;
+  margin-bottom: 4rem;
 }
 
 .title-display {
@@ -158,42 +205,54 @@ onMounted(() => {
   margin-top: 1rem;
 }
 
-.subtitle-text {
-  color: #555;
-  font-size: 1.1rem;
-  max-width: 300px;
-  text-align: right;
-  line-height: 1.4;
-  margin: 0;
+/* Category Filters */
+.filters-wrapper {
+  margin-bottom: 4rem;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.filters-row {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.filter-pill {
+  background: none;
+  border: 1px solid #1a1a1a;
+  color: #888;
+  padding: 0.6rem 1.4rem;
+  border-radius: 100px;
+  font-size: 0.75rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  letter-spacing: 0.5px;
+}
+
+.filter-pill.active {
+  background: #fff;
+  color: #000;
+  border-color: #fff;
+  box-shadow: 0 10px 20px rgba(255, 255, 255, 0.08);
+}
+
+.filter-pill:hover:not(.active) {
+  border-color: #444;
+  color: #fff;
 }
 
 /* Card Grid */
-.merch-grid-bw {
-  display: flex;
-  overflow-x: auto;
-  gap: 1.75rem;
-  padding-bottom: 2rem;
-  scroll-behavior: smooth;
-  -webkit-overflow-scrolling: touch;
-}
-
-.merch-grid-bw::-webkit-scrollbar {
-  height: 6px;
-}
-.merch-grid-bw::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.03);
-  border-radius: 100px;
-}
-.merch-grid-bw::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.15);
-  border-radius: 100px;
-}
-.merch-grid-bw::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.3);
+.all-merch-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 3.5rem 1.75rem;
 }
 
 .card-bw {
-  flex: 0 0 300px;
   cursor: pointer;
   transition: all 0.4s ease;
 }
@@ -414,6 +473,12 @@ onMounted(() => {
   letter-spacing: 1px;
 }
 
+.empty-state {
+  text-align: center;
+  padding: 5rem 0;
+  color: #666;
+  font-size: 1.1rem;
+}
 
 /* Skeleton Loading Styling */
 .skeleton-card {
@@ -524,23 +589,34 @@ onMounted(() => {
   box-shadow: 0 10px 25px rgba(255, 255, 255, 0.15);
 }
 
-/* REFINED MOBILE - SIMILAR TO DESKTOP BUT SCALED */
-@media (max-width: 768px) {
-  .card-bw {
-    flex: 0 0 250px;
+/* RESPONSIVE LAYOUT */
+@media (max-width: 1024px) {
+  .all-merch-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2.5rem 1.5rem;
   }
-  .merch-grid-bw {
-    gap: 1.25rem;
+}
+
+@media (max-width: 768px) {
+  .all-merch-section {
+    padding: 5rem 0;
+  }
+  .all-merch-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem 1.25rem;
   }
 }
 
 @media (max-width: 640px) {
-  .merch-bw-section { padding: 5rem 0; }
-  .title-display { font-size: 2.5rem; }
-  
-  .card-title { font-size: 0.9rem; }
-  .p-amount-white { font-size: 0.85rem; }
-  
+  .title-display {
+    font-size: 2.5rem;
+  }
+  .card-title {
+    font-size: 0.9rem;
+  }
+  .p-amount-white {
+    font-size: 0.85rem;
+  }
   .card-bottom {
     padding-top: 0.75rem;
     gap: 0.5rem;
@@ -555,7 +631,6 @@ onMounted(() => {
   .creator-name {
     font-size: 0.7rem;
   }
-  
   .quantity-selector {
     padding: 1px 4px;
     gap: 0.25rem;
@@ -572,6 +647,10 @@ onMounted(() => {
 }
 
 @media (max-width: 480px) {
+  .all-merch-grid {
+    grid-template-columns: 1fr;
+    gap: 2.5rem 0;
+  }
   .card-bottom {
     flex-direction: column;
     align-items: flex-start;
@@ -585,46 +664,5 @@ onMounted(() => {
     border-top: 1px dashed rgba(255, 255, 255, 0.05);
     padding-top: 0.5rem;
   }
-}
-
-.view-all-wrapper {
-  display: flex;
-  justify-content: center;
-  margin-top: 4rem;
-}
-
-.btn-view-all {
-  background: transparent;
-  color: #fff;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  padding: 1.1rem 2.6rem;
-  border-radius: 100px;
-  font-family: var(--font-body);
-  font-weight: 850;
-  font-size: 0.8rem;
-  letter-spacing: 1.5px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.75rem;
-  cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  text-transform: uppercase;
-}
-
-.btn-view-all:hover {
-  background: #fff;
-  color: #000;
-  border-color: #fff;
-  transform: translateY(-2px);
-  box-shadow: 0 10px 25px rgba(255, 255, 255, 0.15);
-}
-
-.btn-view-all svg {
-  transition: transform 0.3s ease;
-}
-
-.btn-view-all:hover svg {
-  transform: translateX(4px);
 }
 </style>
