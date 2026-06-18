@@ -2443,12 +2443,26 @@ onUnmounted(() => {
     font-size: 2.2rem;
   }
   
-  .checkout-card {
-    padding: 1.5rem;
+  .checkout-card,
+  .summary-floating-card {
+    padding: 1.25rem;
   }
   
   .success-card {
     padding: 2.5rem 1.5rem;
+  }
+  
+  .summary-product-card-mock {
+    padding: 0.75rem;
+  }
+  
+  .voucher-text-input {
+    width: 100%;
+    min-width: 0;
+  }
+  
+  .btn-voucher-apply {
+    flex-shrink: 0;
   }
 }
 
@@ -3141,6 +3155,34 @@ onUnmounted(() => {
   }
   .service-cost {
     font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .prod-card-top {
+    display: grid;
+    grid-template-columns: 64px 1fr;
+    grid-template-areas: 
+      "image info"
+      "image controls";
+    gap: 0.75rem;
+  }
+  
+  .prod-card-img-box {
+    grid-area: image;
+  }
+  
+  .prod-card-info-box {
+    grid-area: info;
+  }
+  
+  .prod-card-right-controls {
+    grid-area: controls;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-top: 0.25rem;
   }
 }
 </style>
