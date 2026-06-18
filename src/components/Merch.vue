@@ -557,17 +557,17 @@ onMounted(() => {
   }
   
   .quantity-selector {
-    padding: 1px 4px;
-    gap: 0.25rem;
+    padding: 4px 10px;
+    gap: 0.6rem;
   }
   .qty-btn {
-    width: 16px;
-    height: 16px;
-    font-size: 0.75rem;
+    width: 26px;
+    height: 26px;
+    font-size: 1rem;
   }
   .qty-num {
-    font-size: 0.75rem;
-    min-width: 12px;
+    font-size: 0.9rem;
+    min-width: 16px;
   }
 }
 
@@ -578,12 +578,17 @@ onMounted(() => {
     gap: 0.6rem;
   }
   .price-quantity-wrapper {
-    flex-direction: row;
-    justify-content: space-between;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: flex-end;
     width: 100%;
-    align-items: center;
+    gap: 0.5rem;
     border-top: 1px dashed rgba(255, 255, 255, 0.05);
     padding-top: 0.5rem;
+  }
+  .p-amount-wrapper {
+    align-items: flex-end;
+    text-align: right;
   }
 }
 
