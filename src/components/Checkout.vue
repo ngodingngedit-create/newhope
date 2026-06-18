@@ -2579,8 +2579,8 @@ onUnmounted(() => {
   }
   
   .btn-bottom-submit {
-    padding: 0.8rem 1.8rem;
-    font-size: 0.8rem;
+    padding: 0.6rem 1.25rem;
+    font-size: 0.72rem;
   }
   
   .timer-text {

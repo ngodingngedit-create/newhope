@@ -30,9 +30,8 @@
       </div>
     </main>
 
-    <!-- <Ticket /> -->
     <Footer v-if="!isCheckout" />
-    <MobileNav />
+    <MobileNav v-if="!isCheckout" />
   </div>
 </template>
 
