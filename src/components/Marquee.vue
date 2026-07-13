@@ -16,7 +16,7 @@
   overflow: hidden;
   background-color: #ffffff;
   color: #000000;
-  padding: 1.25rem 0;
+  padding: 0.5rem 0;
   display: flex;
   white-space: nowrap;
   border-top: 1px solid #000;
@@ -38,16 +38,16 @@
 
 .marquee-text {
   font-family: var(--font-heading);
-  font-size: 3rem;
+  font-size: 1.25rem;
   font-weight: 700;
   letter-spacing: 1px;
   line-height: 1;
   text-transform: uppercase;
-  padding: 0 2rem;
+  padding: 0 1rem;
 }
 
 .marquee-separator {
-  font-size: 1.5rem;
+  font-size: 0.85rem;
   opacity: 0.5;
 }
 
@@ -58,17 +58,17 @@
 
 @media (max-width: 768px) {
   .marquee-container {
-    padding: 0.5rem 0;
+    padding: 0.3rem 0;
   }
   
   .marquee-text {
-    font-size: 1.8rem;
-    padding: 0 1rem;
+    font-size: 0.95rem;
+    padding: 0 0.5rem;
     letter-spacing: 0.5px;
   }
   
   .marquee-separator {
-    font-size: 1rem;
+    font-size: 0.7rem;
   }
 }
 </style>

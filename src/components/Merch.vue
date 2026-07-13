@@ -124,7 +124,7 @@ onMounted(() => {
 
 <style scoped>
 .merch-bw-section {
-  padding: 8rem 0;
+  padding: 2.5rem 0;
   background-color: #000;
   color: #fff;
 }
@@ -133,7 +133,7 @@ onMounted(() => {
   display: flex;
   justify-content: center;
   text-align: center;
-  margin-bottom: 5rem;
+  margin-bottom: 2.5rem;
 }
 
 .header-main {
@@ -143,9 +143,9 @@ onMounted(() => {
 }
 
 .title-display {
-  font-size: clamp(2.5rem, 6vw, 4.5rem);
+  font-size: clamp(1.8rem, 4vw, 2.8rem);
   font-weight: 900;
-  letter-spacing: -3px;
+  letter-spacing: -1.5px;
   margin: 0;
   text-align: center;
 }
@@ -535,8 +535,8 @@ onMounted(() => {
 }
 
 @media (max-width: 640px) {
-  .merch-bw-section { padding: 5rem 0; }
-  .title-display { font-size: 2.5rem; }
+  .merch-bw-section { padding: 1.5rem 0; }
+  .title-display { font-size: 1.6rem; }
   
   .card-title { font-size: 0.9rem; }
   .p-amount-white { font-size: 0.85rem; }

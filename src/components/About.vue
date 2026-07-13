@@ -161,7 +161,7 @@ export default {
 
 <style scoped>
 .about {
-  padding: 5rem 0 6rem;
+  padding: 2.2rem 0;
   background-color: var(--bg-dark);
   border-top: 1px solid rgba(255,255,255,0.05);
 }
@@ -191,7 +191,7 @@ export default {
 
 .main-title {
   font-family: var(--font-heading);
-  font-size: 2.6rem;
+  font-size: 1.8rem;
   color: var(--text-main);
   margin: 0;
   line-height: 1.1;

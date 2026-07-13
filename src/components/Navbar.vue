@@ -13,7 +13,7 @@
       <ul class="nav-links">
         <li><a href="#beranda" @click.prevent="goToHome">BERANDA</a></li>
         <li><a href="#merch" @click.prevent="goToMerch">MERCH</a></li>
-        <li><a href="#lineup" @click.prevent="goToLineup">LINE UP</a></li>
+        <li><a href="#venue" @click.prevent="goToVenue">VENUE</a></li>
         <li><a href="#tentang" @click.prevent="goToTiket">TIKET</a></li>
       </ul>
 
@@ -41,6 +41,14 @@
           </svg>
         </button>
 
+        <!-- Mobile Hamburger Menu Button -->
+        <button class="nav-hamburger-btn" @click="drawerOpen = !drawerOpen" aria-label="Menu">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+        </button>
       </div>
     </div>
 
@@ -70,9 +78,31 @@
       </div>
     </transition>
 
+    <!-- MOBILE DRAWER MENU -->
+    <transition name="drawer-slide">
+      <div v-if="drawerOpen" class="mobile-drawer">
+        <div class="drawer-header">
+          <img src="/logo.png" alt="Newhope" class="drawer-logo" />
+          <button class="btn-close-drawer" @click="drawerOpen = false" aria-label="Close menu">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+        <ul class="drawer-links">
+          <li><a href="#beranda" @click.prevent="goToHomeMobile">BERANDA</a></li>
+          <li><a href="#merch" @click.prevent="goToMerchMobile">MERCH</a></li>
+          <li><a href="#venue" @click.prevent="goToVenueMobile">VENUE</a></li>
+          <li><a href="#tentang" @click.prevent="goToTiketMobile">TIKET</a></li>
+        </ul>
+      </div>
+    </transition>
+
     <!-- Backdrop -->
-    <div v-if="searchOpen" class="search-backdrop" @click="closeSearch"></div>
+    <div v-if="searchOpen || drawerOpen" class="search-backdrop" @click="closeSearch(); drawerOpen = false"></div>
   </nav>
+
 </template>
 
 <script setup>
@@ -83,6 +113,25 @@ const isScrolled = ref(false);
 const searchOpen = ref(false);
 const searchQuery = ref('');
 const searchInput = ref(null);
+const drawerOpen = ref(false);
+
+const goToHomeMobile = () => {
+  drawerOpen.value = false;
+  goToHome();
+};
+const goToMerchMobile = () => {
+  drawerOpen.value = false;
+  goToMerch();
+};
+const goToVenueMobile = () => {
+  drawerOpen.value = false;
+  goToVenue();
+};
+const goToTiketMobile = () => {
+  drawerOpen.value = false;
+  goToTiket();
+};
+
 
 const handleScroll = () => {
   isScrolled.value = window.scrollY > 50;
@@ -120,14 +169,14 @@ const goToMerch = () => {
   navigateTo('/merchandise');
 };
 
-const goToLineup = () => {
+const goToVenue = () => {
   if (window.location.pathname !== '/') {
     navigateTo('/');
     setTimeout(() => {
-      document.getElementById('lineup')?.scrollIntoView({ behavior: 'smooth' });
+      document.getElementById('venue')?.scrollIntoView({ behavior: 'smooth' });
     }, 100);
   } else {
-    document.getElementById('lineup')?.scrollIntoView({ behavior: 'smooth' });
+    document.getElementById('venue')?.scrollIntoView({ behavior: 'smooth' });
   }
 };
 
@@ -160,7 +209,7 @@ onUnmounted(() => {
   left: 0;
   width: 100%;
   padding: 1rem 0;
-  z-index: 100;
+  z-index: 999;
   transition: all 0.3s ease;
   background: transparent;
 }
@@ -399,9 +448,103 @@ onUnmounted(() => {
   transform: translateY(-8px);
 }
 
+/* Hamburger button */
+.nav-hamburger-btn {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 100px;
+  border: 1px solid rgba(255,255,255,0.15);
+  background: transparent;
+  color: var(--text-main);
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+.nav-hamburger-btn:hover {
+  border-color: var(--text-main);
+  background: rgba(255,255,255,0.08);
+}
+
+/* Mobile Drawer Menu */
+.mobile-drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 280px;
+  height: 100vh;
+  background: #09090b;
+  border-left: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 2rem 1.5rem;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+  box-shadow: -10px 0 30px rgba(0, 0, 0, 0.5);
+}
+
+.drawer-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.drawer-logo {
+  height: 25px;
+  width: auto;
+  object-fit: contain;
+}
+
+.btn-close-drawer {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: color 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.btn-close-drawer:hover {
+  color: #ffffff;
+}
+
+.drawer-links {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 0;
+  margin: 0;
+}
+
+.drawer-links a {
+  font-family: var(--font-heading);
+  font-size: 1.8rem;
+  font-weight: 500;
+  letter-spacing: 1px;
+  color: #ffffff;
+  transition: color 0.2s;
+  display: block;
+}
+.drawer-links a:hover {
+  color: var(--text-muted);
+}
+
+/* Transitions for slide */
+.drawer-slide-enter-active,
+.drawer-slide-leave-active {
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.drawer-slide-enter-from,
+.drawer-slide-leave-to {
+  transform: translateX(100%);
+}
+
 /* ── RESPONSIVE ────────────────────────── */
 @media (max-width: 768px) {
   .nav-links { display: none; }
+  .nav-hamburger-btn { display: flex; }
   
   .brand-logo-link {
     width: 100px;

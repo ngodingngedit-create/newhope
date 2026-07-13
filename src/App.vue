@@ -6,8 +6,12 @@
     <CartSidebar />
     
     <main>
+      <!-- Halaman Detail Venue -->
+      <div v-if="isVenueDetail">
+        <Venue :detailId="venueId" />
+      </div>
       <!-- Halaman Detail Merchandise -->
-      <div v-if="isMerchDetail">
+      <div v-else-if="isMerchDetail">
         <MerchDetail :slug="merchSlug" />
       </div>
       <!-- Halaman Checkout -->
@@ -18,13 +22,12 @@
       <div v-else-if="isMerchAll">
         <AllMerch />
       </div>
-      <!-- Halaman Landing Page Utama -->
       <div v-else>
         <Hero />
         <Marquee />
         <Merch />
         <Marquee />
-        <Lineup />
+        <Venue />
         <Marquee />
         <About />
       </div>
@@ -40,7 +43,7 @@ import { ref, onMounted, computed } from 'vue';
 import Navbar from './components/Navbar.vue';
 import Hero from './components/Hero.vue';
 import About from './components/About.vue';
-import Lineup from './components/Lineup.vue';
+import Venue from './components/Venue.vue';
 import Merch from './components/Merch.vue';
 import MerchDetail from './components/MerchDetail.vue';
 import AllMerch from './components/AllMerch.vue';
@@ -52,6 +55,17 @@ import Marquee from './components/Marquee.vue';
 import MobileNav from './components/MobileNav.vue';
 
 const currentPath = ref(window.location.pathname);
+
+const isVenueDetail = computed(() => {
+  return currentPath.value.startsWith('/venue/');
+});
+
+const venueId = computed(() => {
+  if (isVenueDetail.value) {
+    return parseInt(currentPath.value.split('/venue/')[1]) || 0;
+  }
+  return 0;
+});
 
 const isMerchDetail = computed(() => {
   return currentPath.value.startsWith('/merchandise/');
@@ -87,7 +101,6 @@ html {
   scroll-behavior: smooth;
 }
 .app-wrapper {
-  overflow-x: hidden;
   position: relative;
 }
 </style>

@@ -100,6 +100,8 @@ export const decreaseQty = (item: MerchandiseItem) => {
 };
 
 export const isCartOpen = ref(false);
+export const hideMobileNavGlobal = ref(false);
+
 
 export const toggleCart = () => {
   isCartOpen.value = !isCartOpen.value;
