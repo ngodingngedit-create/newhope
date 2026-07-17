@@ -1,5 +1,5 @@
 import { ref, computed } from 'vue';
-import { MerchandiseItem, APIEventResponse, mapAPIEventToMerchandise } from './types';
+import { MerchandiseItem, APIEventResponse, mapAPIEventToMerchandise, BookedSlot } from './types';
 import { getCatalog } from './api';
 
 export const merchItems = ref<MerchandiseItem[]>([]);
@@ -129,3 +129,8 @@ export const navigateTo = (path: string) => {
   history.pushState(null, '', path);
   window.dispatchEvent(new CustomEvent('navigation-change'));
 };
+
+// Shared Venue Booking State
+export const bookingVenue = ref<any>(null);
+export const bookingSchedules = ref<BookedSlot[]>([]);
+

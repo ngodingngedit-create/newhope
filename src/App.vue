@@ -18,6 +18,10 @@
       <div v-else-if="isCheckout">
         <Checkout />
       </div>
+      <!-- Halaman Data Pemesan (Checkout Venue) -->
+      <div v-else-if="isBookingCheckout">
+        <DataPemesan />
+      </div>
       <!-- Halaman Semua Merchandise -->
       <div v-else-if="isMerchAll">
         <AllMerch />
@@ -33,8 +37,8 @@
       </div>
     </main>
 
-    <Footer v-if="!isCheckout" />
-    <MobileNav v-if="!isCheckout" />
+    <Footer v-if="!isCheckout && !isBookingCheckout" />
+    <MobileNav v-if="!isCheckout && !isBookingCheckout" />
   </div>
 </template>
 
@@ -48,6 +52,7 @@ import Merch from './components/Merch.vue';
 import MerchDetail from './components/MerchDetail.vue';
 import AllMerch from './components/AllMerch.vue';
 import Checkout from './components/Checkout.vue';
+import DataPemesan from './components/DataPemesan.vue';
 import CartSidebar from './components/CartSidebar.vue';
 // import Ticket from './components/Ticket.vue';
 import Footer from './components/Footer.vue';
@@ -77,6 +82,10 @@ const isMerchAll = computed(() => {
 
 const isCheckout = computed(() => {
   return currentPath.value === '/checkout';
+});
+
+const isBookingCheckout = computed(() => {
+  return currentPath.value === '/data-pemesan';
 });
 
 const merchSlug = computed(() => {

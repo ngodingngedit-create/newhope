@@ -221,3 +221,12 @@ export function mapAPIEventToMerchandise(item: APIEventItem): MerchandiseItem {
     quantity: 0,
   };
 }
+
+export interface BookedSlot {
+  id: string;
+  dateStr: string;
+  area: string;
+  timeRange: string;
+  price: number;
+  notes?: string;
+}

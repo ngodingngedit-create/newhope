@@ -1115,7 +1115,8 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted, watch } from 'vue';
-import { navigateTo, hideMobileNavGlobal } from '../store';
+import { navigateTo, hideMobileNavGlobal, bookingVenue, bookingSchedules } from '../store';
+import { BookedSlot } from '../types';
 
 const props = defineProps<{
   detailId?: number;
@@ -1213,13 +1214,7 @@ const descExpanded = ref(false);
 const showGalleryModal = ref(false);
 const isEditMode = ref(false);
 
-interface BookedSlot {
-  id: string;
-  dateStr: string;
-  area: string;
-  timeRange: string;
-  price: number;
-}
+
 
 const addedSchedules = ref<BookedSlot[]>([]);
 
@@ -1854,12 +1849,13 @@ const chatHost = () => {
 };
 
 const processBooking = () => {
-  if (!selectedDurationType.value) {
-    activeTab.value = 'BOOKING VENUE';
-    alert('Silakan pilih waktu penggunaan (Sesi Jam / Paket Sesi / Custom) terlebih dahulu.');
+  if (addedSchedules.value.length === 0) {
+    alert('Silakan pilih dan tambahkan jadwal terlebih dahulu.');
     return;
   }
-  isBooked.value = true;
+  bookingVenue.value = selectedVenue.value;
+  bookingSchedules.value = addedSchedules.value;
+  navigateTo('/data-pemesan');
 };
 
 const resetBookingFlow = () => {

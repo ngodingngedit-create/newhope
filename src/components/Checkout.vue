@@ -1127,10 +1127,7 @@ onUnmounted(() => {
             </div>
           </div>
 
-          <!-- Complete button -->
-          <button class="btn-finish-checkout" @click="resetCheckout">
-            Selesai & Kembali ke Catalog
-          </button>
+      
         </div>
       </div>
 
