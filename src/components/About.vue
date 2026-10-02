@@ -15,7 +15,7 @@ export default {
 
   async mounted() {
     try {
-      const response = await fetch("https://api.kolektix.com/api/event/street-riot-parade")
+      const response = await fetch("https://api.kolektix.com/api/event/siksakubur-tiga-dekade-melawan-tunduk")
       const data = await response.json()
       console.log("DATA API:", data)
       this.dataKolektixNewHope = data.data
@@ -150,7 +150,7 @@ export default {
         <!-- ACTIONS -->
         <div class="action-buttons">
           <!-- <a href="#" class="btn-chat">Chat</a> -->
-          <a href="https://kolektix.com/event/street-riot-parade" target="_blank" class="btn-ticket">Beli Tiket</a>
+          <a href="https://kolektix.com/event/siksakubur-tiga-dekade-melawan-tunduk" target="_blank" class="btn-ticket">Beli Tiket</a>
         </div>
       </div>
     </div>

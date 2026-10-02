@@ -34,10 +34,12 @@
         <Venue />
         <Marquee />
         <About />
+        <Marquee />
+        <Gallery />
       </div>
     </main>
 
-    <Footer v-if="!isCheckout && !isBookingCheckout" />
+    <Footer v-if="!isCheckout && !isBookingCheckout && !isVenueDetail" />
     <MobileNav v-if="!isCheckout && !isBookingCheckout" />
   </div>
 </template>
@@ -57,6 +59,7 @@ import CartSidebar from './components/CartSidebar.vue';
 // import Ticket from './components/Ticket.vue';
 import Footer from './components/Footer.vue';
 import Marquee from './components/Marquee.vue';
+import Gallery from './components/Gallery.vue';
 import MobileNav from './components/MobileNav.vue';
 
 const currentPath = ref(window.location.pathname);

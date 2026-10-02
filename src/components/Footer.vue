@@ -5,7 +5,7 @@
       <div class="footer-top">
         <!-- Logo -->
         <a href="#beranda" class="logo" @click.prevent="goToHome">
-          <img src="/logo.png" class="logo-img" alt="Newhope Logo" />
+          <img src="/NEWHOPE ARENA WHITE.webp" class="logo-img" alt="Newhope Logo" />
         </a>
 
         <!-- Social Icons Group -->

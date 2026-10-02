@@ -5,7 +5,7 @@
       <!-- LOGO -->
       <div class="logo-wrapper">
         <a href="#beranda" class="brand-logo-link" @click.prevent="goToHome">
-          <img src="/logo.png" alt="Newhope" class="brand-logo" />
+          <img src="/NEWHOPE ARENA WHITE.webp" alt="Newhope" class="brand-logo" />
         </a>
       </div>
 
@@ -15,6 +15,7 @@
         <li><a href="#merch" @click.prevent="goToMerch">MERCH</a></li>
         <li><a href="#venue" @click.prevent="goToVenue">VENUE</a></li>
         <li><a href="#tentang" @click.prevent="goToTiket">TIKET</a></li>
+        <li><a href="#gallery" @click.prevent="goToGallery">GALERI</a></li>
       </ul>
 
       <!-- RIGHT ACTIONS -->
@@ -82,7 +83,7 @@
     <transition name="drawer-slide">
       <div v-if="drawerOpen" class="mobile-drawer">
         <div class="drawer-header">
-          <img src="/logo.png" alt="Newhope" class="drawer-logo" />
+          <img src="/NEWHOPE ARENA WHITE.webp" alt="Newhope" class="drawer-logo" />
           <button class="btn-close-drawer" @click="drawerOpen = false" aria-label="Close menu">
             <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
               <line x1="18" y1="6" x2="6" y2="18"></line>
@@ -95,6 +96,7 @@
           <li><a href="#merch" @click.prevent="goToMerchMobile">MERCH</a></li>
           <li><a href="#venue" @click.prevent="goToVenueMobile">VENUE</a></li>
           <li><a href="#tentang" @click.prevent="goToTiketMobile">TIKET</a></li>
+          <li><a href="#gallery" @click.prevent="goToGalleryMobile">GALERI</a></li>
         </ul>
       </div>
     </transition>
@@ -106,8 +108,8 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted, nextTick } from 'vue';
-import { totalCartQty, toggleCart, navigateTo } from '../store';
+import { ref, onMounted, onUnmounted, nextTick, watch } from 'vue';
+import { totalCartQty, toggleCart, navigateTo, isMobileDrawerOpen } from '../store';
 
 const isScrolled = ref(false);
 const searchOpen = ref(false);
@@ -130,6 +132,10 @@ const goToVenueMobile = () => {
 const goToTiketMobile = () => {
   drawerOpen.value = false;
   goToTiket();
+};
+const goToGalleryMobile = () => {
+  drawerOpen.value = false;
+  goToGallery();
 };
 
 
@@ -191,9 +197,24 @@ const goToTiket = () => {
   }
 };
 
+const goToGallery = () => {
+  if (window.location.pathname !== '/') {
+    navigateTo('/');
+    setTimeout(() => {
+      document.getElementById('gallery')?.scrollIntoView({ behavior: 'smooth' });
+    }, 100);
+  } else {
+    document.getElementById('gallery')?.scrollIntoView({ behavior: 'smooth' });
+  }
+};
+
 onMounted(() => {
   window.addEventListener('scroll', handleScroll);
   window.addEventListener('toggle-search', toggleSearch);
+});
+
+watch(drawerOpen, (val) => {
+  isMobileDrawerOpen.value = val;
 });
 
 onUnmounted(() => {
@@ -237,15 +258,15 @@ onUnmounted(() => {
 .brand-logo-link {
   display: flex;
   align-items: center;
-  width: 150px;
-  height: 50px;
-  overflow: hidden;
+  width: auto;
+  height: auto;
+  overflow: visible;
 }
 
 .brand-logo {
   display: block;
-  width: 120px;
-  height: 120px;
+  width: auto;
+  height: 56px;
   object-fit: contain;
   object-position: left center;
   flex-shrink: 0;
@@ -547,13 +568,13 @@ onUnmounted(() => {
   .nav-hamburger-btn { display: flex; }
   
   .brand-logo-link {
-    width: 100px;
-    height: 40px;
+    width: auto;
+    height: auto;
   }
   
   .brand-logo {
-    width: 80px;
-    height: 80px;
+    width: auto;
+    height: 44px;
   }
 
   .nav-btn {

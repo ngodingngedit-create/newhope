@@ -30,16 +30,16 @@
       <!-- ── CATALOG GRID (Image 1) ───────────────── -->
       <div class="venue-grid">
         <div 
-          v-for="venue in filteredVenues" 
+          v-for="venue in filteredVenues.filter(v => [7, 8, 9].includes(v.id))" 
           :key="venue.id" 
           class="venue-card"
           @click="openDetail(venue)"
         >
           <div class="card-image-wrap">
             <img :src="venue.image" :alt="venue.name" class="venue-image" />
-            <div class="card-tap-overlay">
-              <span>EXPLORE VENUE</span>
-            </div>
+            <span class="category-badge">
+              <span>{{ venue.subCategory }}</span>
+            </span>
           </div>
           <div class="card-body">
             <div class="venue-title-container">
@@ -60,21 +60,6 @@
             <div class="info-row price-row">
               <span class="price-label">Mulai:</span>
               <span class="price-value">{{ venue.price === 0 ? 'Free' : 'Rp' + formatPrice(venue.price) }}</span>
-            </div>
-          </div>
-          <div class="card-footer">
-            <div class="category-badge">
-              <svg class="icon-tag" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-                <line x1="9" y1="3" x2="9" y2="21"></line>
-              </svg>
-              <span>{{ venue.subCategory }}</span>
-            </div>
-            <div class="rating-badge">
-              <svg class="icon-star" viewBox="0 0 24 24" fill="currentColor">
-                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
-              </svg>
-              <span>{{ venue.rating }}</span>
             </div>
           </div>
         </div>
@@ -112,7 +97,7 @@
             <div class="gallery-small-4">
               <img :src="selectedVenue.gallery[4]" alt="Detail View 4" />
               <div class="overlay-more">
-                <button class="btn-more-photos" @click="showGalleryModal = true">
+                <button class="btn-more-photos" @click.stop="openGalleryAt(0)">
                   <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
                     <circle cx="12" cy="13" r="4"></circle>
@@ -372,62 +357,7 @@
             <!-- Section Divider -->
             <div class="section-divider"></div>
 
-            <!-- Review List Section -->
-            <div id="section-ulasan" class="reviews-section-block">
-              <div class="review-title-header">
-                <h3 class="review-main-heading">Review</h3>
-                <a href="#" class="review-link-see-all" @click.prevent="onTabClick('ULASAN')">Lihat semua</a>
-              </div>
-
-              <div class="review-stats-summary-row">
-                <div class="review-stats-left">
-                  <span class="review-avg-score">{{ selectedVenue.rating.toFixed(1).replace('.', ',') }}<span class="review-score-max">/5</span></span>
-                  <div class="review-desc-col">
-                    <span class="review-grade-bold">{{ selectedVenue.rating >= 4.5 ? 'Sangat Bagus' : 'Bagus' }}</span>
-                    <span class="review-count-total">Dari {{ selectedVenue.ratingCount }} review</span>
-                  </div>
-                </div>
-                
-                <div class="review-carousel-controls">
-                  <button class="review-arrow-btn" @click="scrollReviews('left')" aria-label="Previous reviews">
-                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                      <polyline points="15 18 9 12 15 6"></polyline>
-                    </svg>
-                  </button>
-                  <button class="review-arrow-btn" @click="scrollReviews('right')" aria-label="Next reviews">
-                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                      <polyline points="9 18 15 12 9 6"></polyline>
-                    </svg>
-                  </button>
-                </div>
-              </div>
-
-              <!-- Reviews Carousel Container -->
-              <div class="reviews-carousel-slider" ref="reviewsSlider">
-                <div v-for="review in selectedVenue.reviewsList" :key="review.id" class="premium-review-card-item">
-                  <!-- Card Header: Avatar + Name/Date -->
-                  <div class="rcard-header">
-                    <div class="rcard-avatar-wrap">
-                      <img :src="review.avatar" :alt="review.name" class="rcard-avatar" />
-                    </div>
-                    <div class="rcard-meta-col">
-                      <div class="rcard-author-name">{{ review.name }}</div>
-                      <div class="rcard-venue-tag">{{ selectedVenue.name }}</div>
-                    </div>
-                    <div class="rcard-date-badge">{{ review.date }}</div>
-                  </div>
-                  <!-- Star Rating Row -->
-                  <div class="rcard-stars-row">
-                    <svg v-for="s in review.stars" :key="s" viewBox="0 0 24 24" width="14" height="14" fill="#f59e0b" class="rcard-star">
-                      <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
-                    </svg>
-                    <span class="rcard-rating-num">{{ review.stars.toFixed(1) }}/5</span>
-                  </div>
-                  <!-- Review Body -->
-                  <p class="rcard-body-text">{{ review.text }}</p>
-                </div>
-              </div>
-            </div>
+          
 
             <!-- Section Divider -->
             <div class="section-divider"></div>
@@ -1091,21 +1021,36 @@
       </div>
 
       <!-- ALL PHOTOS GALLERY LIGHTBOX MODAL -->
-      <div class="success-overlay" v-if="showGalleryModal && selectedVenue" @click.self="showGalleryModal = false" style="z-index: 2000;">
+      <div class="success-overlay gallery-lightbox-overlay" v-if="showGalleryModal && selectedVenue" @click.self="closeGallery()" style="z-index: 2000;">
         <div class="gallery-modal-card">
           <div class="gallery-modal-header">
-            <h3>SEMUA FOTO VENUE - {{ selectedVenue.name.toUpperCase() }}</h3>
-            <button class="btn-close-gallery" @click="showGalleryModal = false" aria-label="Close gallery">
+            <h3>{{ selectedVenue.name.toUpperCase() }} — {{ galleryActiveIndex + 1 }} / {{ selectedVenue.gallery.length }}</h3>
+            <button class="btn-close-gallery" @click="closeGallery()" aria-label="Close gallery">
               <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                 <line x1="18" y1="6" x2="6" y2="18"></line>
                 <line x1="6" y1="6" x2="18" y2="18"></line>
               </svg>
             </button>
           </div>
-          <div class="gallery-modal-scroll">
-            <div class="gallery-modal-grid">
-              <img v-for="(img, idx) in selectedVenue.gallery" :key="idx" :src="img" alt="Gallery Image" class="gallery-modal-img" />
-            </div>
+          <div class="gallery-lightbox-stage">
+            <button class="gallery-nav-btn prev" @click.stop="prevGalleryPhoto()" aria-label="Previous photo">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+            </button>
+            <img :key="galleryActiveIndex" :src="selectedVenue.gallery[galleryActiveIndex]" alt="Gallery Image Full" class="gallery-lightbox-img" @click.stop @touchstart.passive="onGalleryTouchStart($event)" @touchend.passive="onGalleryTouchEnd($event)" />
+            <button class="gallery-nav-btn next" @click.stop="nextGalleryPhoto()" aria-label="Next photo">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            </button>
+          </div>
+          <div class="gallery-lightbox-thumbs">
+            <img
+              v-for="(img, idx) in selectedVenue.gallery"
+              :key="idx"
+              :src="img"
+              alt="Gallery thumbnail"
+              class="gallery-lightbox-thumb"
+              :class="{ active: idx === galleryActiveIndex }"
+              @click.stop="openGalleryAt(idx)"
+            />
           </div>
         </div>
       </div>
@@ -1183,20 +1128,16 @@ const categories = [
     icon: `<svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><rect x="3" y="3" width="7" height="7" rx="1"></rect><rect x="14" y="3" width="7" height="7" rx="1"></rect><rect x="3" y="14" width="7" height="7" rx="1"></rect><rect x="14" y="14" width="7" height="7" rx="1"></rect></svg>`
   },
   {
-    name: 'Convention Hall',
-    icon: `<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 22V4c0-.5.2-1 .6-1.4C5 2.2 5.5 2 6 2h12c.5 0 1 .2 1.4.6.4.4.6.9.6 1.4v18M10 22v-4a2 2 0 0 1 4 0v4M18 10h.01M6 10h.01M18 6h.01M6 6h.01M18 14h.01M6 14h.01M18 18h.01M6 18h.01"></svg>`
-  },
-  {
-    name: 'Meeting Room',
-    icon: `<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="12" rx="2"></rect><path d="M12 16v4M8 20h8"></path></svg>`
-  },
-  {
-    name: 'Auditorium',
-    icon: `<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 17A10 10 0 0 1 22 17M12 2v6M5 6l4.5 4.5M19 6l-4.5 4.5"></path></svg>`
-  },
-  {
-    name: 'Hall',
+    name: 'Multi Fungsi',
     icon: `<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>`
+  },
+  {
+    name: 'Studio Rekaman',
+    icon: `<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle></svg>`
+  },
+  {
+    name: 'Studio Foto',
+    icon: `<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>`
   }
 ];
 
@@ -1212,6 +1153,7 @@ const reviewsSlider = ref<HTMLElement | null>(null);
 const facilitiesExpanded = ref(false);
 const descExpanded = ref(false);
 const showGalleryModal = ref(false);
+const galleryActiveIndex = ref(0);
 const isEditMode = ref(false);
 
 
@@ -1726,6 +1668,150 @@ const venuesList = ref<VenueItem[]>([
       avatar: 'https://ui-avatars.com/api/?name=NH&background=09090b&color=fff&bold=true'
     },
     areas: ['Grand Ballroom', 'Foyer & Reception Desk']
+  },
+  {
+    id: 7,
+    name: 'Newhope Arena',
+    category: 'Hall',
+    subCategory: 'Multi Fungsi',
+    location: 'Bekasi Timur',
+    address: 'Mall Bekasi Junction, Lt. UG, Margahayu, Bekasi Timur 17111',
+    price: 2500000,
+    rating: 5.0,
+    ratingCount: 12,
+    image: '/veneu/coverBanner.webp',
+    gallery: [
+      '/veneu/IMG_3262.webp',
+      '/veneu/IMG_3264.webp',
+      '/veneu/IMG_3265.webp',
+      '/veneu/IMG_3266.JPG.webp',
+      '/veneu/IMG_3268.webp',
+      '/veneu/IMG_3269.webp',
+      '/veneu/IMG_3270.webp',
+      '/veneu/IMG_3271.webp',
+      '/veneu/IMG_3272.JPG.jpeg',
+      '/veneu/IMG_3274.JPG.webp',
+      '/veneu/IMG_3275.webp',
+      '/veneu/IMG_3276.webp'
+    ],
+    description: 'Newhope Arena adalah venue multifungsi di Mall Bekasi Junction Lt. UG, Margahayu, Bekasi Timur. Dirancang untuk konser, gathering, exhibition, seminar, corporate event, private party, hingga yoga, zumba, dan pound fit dengan kapasitas hingga 500 pax, sistem audio, lighting, dan crew profesional. Satu Venue untuk Semua Impianmu. Bagian dari ekosistem Newhope.inc: Records & Store, Photo Studio, Music Studio, Sound System & Lighting Rental.',
+    rules: [
+      'Check-in 15 menit sebelum waktu acara',
+      'Dilarang merokok di dalam venue',
+      'Menjaga kebersihan area venue',
+      'Jaga dan amankan barang bawaan masing-masing'
+    ],
+    facilities: [
+      { name: 'Kapasitas Fleksibel hingga 500 pax', icon: '👥' },
+      { name: 'Sound System Profesional', icon: '🔊' },
+      { name: 'Lighting Terbaik', icon: '💡' },
+      { name: 'Crew Berpengalaman', icon: '⚙️' },
+      { name: 'Stage 8x5m + Genset 60KVA', icon: '🎭' }
+    ],
+    reviewsList: [],
+    faqs: [
+      { q: 'Berapa kapasitas maksimal Newhope Arena?', a: 'Kapasitas maksimal hingga 500 pax.' },
+      { q: 'Paket apa saja yang tersedia?', a: 'Tersedia paket Venue Only, Standard, Premium, hingga Full Event, plus SSL Rental dan backline rental.' }
+    ],
+    organizer: {
+      name: 'newhope.arena',
+      username: 'newhope.arena',
+      avatar: 'https://ui-avatars.com/api/?name=NA&background=dc2626&color=fff&bold=true'
+    },
+    areas: ['Main Arena']
+  },
+  {
+    id: 8,
+    name: 'Newhope Music Studio',
+    category: 'Music Studio',
+    subCategory: 'Studio Rekaman',
+    location: 'Bekasi Timur',
+    address: 'Mall Bekasi Junction, Lt. UG, Margahayu, Bekasi Timur 17111',
+    price: 150000,
+    rating: 5.0,
+    ratingCount: 0,
+    image: '/musicStudio/1A.webp',
+    gallery: [
+      '/musicStudio/1A.webp',
+      '/musicStudio/2B.webp',
+      '/musicStudio/3C.webp',
+      '/musicStudio/4D.webp',
+      '/musicStudio/5E.webp',
+      '/musicStudio/6F.webp',
+      '/musicStudio/7G.webp'
+    ],
+    description: 'Newhope Music Studio adalah studio latihan dan rekaman dengan akustik ruangan yang nyaman, cocok untuk latihan band, take vokal, dan produksi musik. Bagian dari ekosistem Newhope.inc: Records & Store, Photo Studio, Venue, Sound System & Lighting Rental.',
+    rules: [
+      'Check-in 10 menit sebelum waktu sesi',
+      'Dilarang merokok di dalam studio',
+      'Menjaga kebersihan dan kerapian alat',
+      'Jaga dan amankan barang bawaan masing-masing'
+    ],
+    facilities: [
+      { name: 'Ruangan Akustik Nyaman', icon: '🎧' },
+      { name: 'Full Backline Band', icon: '🎸' },
+      { name: 'Operator / Sound Engineer', icon: '🎚️' },
+      { name: 'AC & Ruang Tunggu', icon: '❄️' },
+      { name: 'Sewa per Jam / Shift', icon: '🕒' }
+    ],
+    reviewsList: [],
+    faqs: [
+      { q: 'Berapa tarif sewa studio?', a: 'Tarif mulai dari Rp150.000 per sesi. Hubungi admin untuk paket jam dan shift.' },
+      { q: 'Apakah alat musik sudah tersedia?', a: 'Ya, tersedia full backline standar band. Bawa stik dan gitar sendiri disarankan untuk kenyamanan.' }
+    ],
+    organizer: {
+      name: 'newhope.studio',
+      username: 'newhope.studio',
+      avatar: 'https://ui-avatars.com/api/?name=NS&background=09090b&color=fff&bold=true'
+    },
+    areas: ['Studio A']
+  },
+  {
+    id: 9,
+    name: 'Newhope Photo Studio',
+    category: 'Photo Studio',
+    subCategory: 'Studio Foto',
+    location: 'Bekasi Timur',
+    address: 'Mall Bekasi Junction, Lt. UG, Margahayu, Bekasi Timur 17111',
+    price: 200000,
+    rating: 5.0,
+    ratingCount: 0,
+    image: '/photoStudio/1.webp',
+    gallery: [
+      '/photoStudio/1.webp',
+      '/photoStudio/2.webp',
+      '/photoStudio/3.webp',
+      '/photoStudio/4.webp',
+      '/photoStudio/5.webp',
+      '/photoStudio/6.webp',
+      '/photoStudio/7.webp',
+      '/photoStudio/8.webp'
+    ],
+    description: 'Newhope Photo Studio adalah studio foto dengan lighting profesional dan backdrop variatif, cocok untuk foto produk, portrait, prewedding, dan konten. Bagian dari ekosistem Newhope.inc: Records & Store, Music Studio, Venue, Sound System & Lighting Rental.',
+    rules: [
+      'Check-in 10 menit sebelum waktu sesi',
+      'Dilarang merokok di dalam studio',
+      'Menjaga kebersihan backdrop dan properti',
+      'Jaga dan amankan barang bawaan masing-masing'
+    ],
+    facilities: [
+      { name: 'Lighting Profesional', icon: '💡' },
+      { name: 'Backdrop Variatif', icon: '🖼️' },
+      { name: 'Fotografer / Asisten', icon: '📷' },
+      { name: 'Ruang Ganti & AC', icon: '❄️' },
+      { name: 'Sewa per Jam / Shift', icon: '🕒' }
+    ],
+    reviewsList: [],
+    faqs: [
+      { q: 'Berapa tarif sewa studio?', a: 'Tarif mulai dari Rp200.000 per sesi. Hubungi admin untuk paket jam dan shift.' },
+      { q: 'Apakah tersedia fotografer?', a: 'Ya, tersedia opsi dengan fotografer dan asisten. Bisa juga sewa ruangan saja.' }
+    ],
+    organizer: {
+      name: 'newhope.photo',
+      username: 'newhope.photo',
+      avatar: 'https://ui-avatars.com/api/?name=NP&background=09090b&color=fff&bold=true'
+    },
+    areas: ['Studio Foto']
   }
 ]);
 
@@ -1734,7 +1820,7 @@ const filteredVenues = computed(() => {
   if (selectedCategory.value === 'Semua') {
     return venuesList.value;
   }
-  return venuesList.value.filter(v => v.category === selectedCategory.value);
+  return venuesList.value.filter(v => v.subCategory === selectedCategory.value);
 });
 
 // ── BOOKING DATES GENERATION ──────────────────
@@ -1830,6 +1916,48 @@ const loadVenueDetails = (id: number) => {
   }
 };
 
+// ── GALLERY LIGHTBOX ────────────────────────
+const openGalleryAt = (idx: number) => {
+  galleryActiveIndex.value = idx;
+  showGalleryModal.value = true;
+  document.body.style.overflow = 'hidden';
+};
+
+const closeGallery = () => {
+  showGalleryModal.value = false;
+  document.body.style.overflow = '';
+};
+
+const nextGalleryPhoto = () => {
+  if (!selectedVenue.value) return;
+  galleryActiveIndex.value = (galleryActiveIndex.value + 1) % selectedVenue.value.gallery.length;
+};
+
+const prevGalleryPhoto = () => {
+  if (!selectedVenue.value) return;
+  galleryActiveIndex.value = (galleryActiveIndex.value - 1 + selectedVenue.value.gallery.length) % selectedVenue.value.gallery.length;
+};
+
+let galleryTouchStartX = 0;
+
+const onGalleryTouchStart = (e: TouchEvent) => {
+  galleryTouchStartX = e.touches[0]?.clientX ?? 0;
+};
+
+const onGalleryTouchEnd = (e: TouchEvent) => {
+  const dx = (e.changedTouches[0]?.clientX ?? 0) - galleryTouchStartX;
+  if (Math.abs(dx) < 40) return;
+  if (dx < 0) nextGalleryPhoto();
+  else prevGalleryPhoto();
+};
+
+const onGalleryKeydown = (e: KeyboardEvent) => {
+  if (!showGalleryModal.value) return;
+  if (e.key === 'Escape') closeGallery();
+  else if (e.key === 'ArrowRight') nextGalleryPhoto();
+  else if (e.key === 'ArrowLeft') prevGalleryPhoto();
+};
+
 // ── OPEN / CLOSE DETAILS ──────────────────────
 const openDetail = (venue: VenueItem) => {
   navigateTo('/venue/' + venue.id);
@@ -1868,6 +1996,7 @@ onMounted(() => {
   checkIfMobile();
   window.addEventListener('resize', checkIfMobile);
   window.addEventListener('click', handleClickOutside);
+  window.addEventListener('keydown', onGalleryKeydown);
   generateBookingDates();
   
   if (props.detailId) {
@@ -1879,6 +2008,8 @@ onMounted(() => {
 onUnmounted(() => {
   window.removeEventListener('resize', checkIfMobile);
   window.removeEventListener('click', handleClickOutside);
+  window.removeEventListener('keydown', onGalleryKeydown);
+  document.body.style.overflow = '';
 });
 
 watch(() => props.detailId, (newId) => {
@@ -2005,6 +2136,29 @@ watch(() => props.detailId, (newId) => {
   width: 100%;
 }
 
+.venue-grid:has(> :only-child) {
+  grid-template-columns: minmax(0, 400px);
+  justify-content: center;
+}
+
+.venue-grid {
+  justify-content: center;
+}
+
+@media (hover: none) {
+  .card-image-wrap::before,
+  .card-image-wrap::after { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card-image-wrap::before,
+  .card-image-wrap::after,
+  .venue-image,
+  .card-image-wrap { transition: none; }
+  .marquee-track.animate-marquee { animation: none; }
+  .gallery-lightbox-img { animation: none; }
+}
+
 @media (max-width: 1200px) {
   .venue-grid {
     grid-template-columns: repeat(3, 1fr);
@@ -2045,30 +2199,45 @@ watch(() => props.detailId, (newId) => {
   transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* Glow light sheet slide on hover */
+/* Sheen light sweep on hover — smooth slide-in / slide-out via transform */
+/* ponytail: single sweep only; add infinite loop when requested */
+.card-image-wrap::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(120% 90% at 50% 110%, rgba(255,255,255,0.22), transparent 60%);
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.venue-card:hover .card-image-wrap::before { opacity: 1; }
+
 .card-image-wrap::after {
   content: '';
   position: absolute;
-  top: 0;
-  left: -150%;
-  width: 100%;
-  height: 100%;
+  top: -20%;
+  left: 0;
+  width: 45%;
+  height: 140%;
   background: linear-gradient(
     90deg,
     rgba(255, 255, 255, 0) 0%,
-    rgba(255, 255, 255, 0.5) 45%,
-    rgba(255, 255, 255, 0.5) 55%,
+    rgba(255, 255, 255, 0.55) 45%,
+    rgba(255, 255, 255, 0.55) 55%,
     rgba(255, 255, 255, 0) 100%
   );
-  transform: skewX(-20deg);
-  mix-blend-mode: overlay; /* makes the slide gloss look like light blending */
+  transform: translateX(-350%) skewX(-20deg);
+  opacity: 1;
   pointer-events: none;
   z-index: 2;
-  transition: left 1.3s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: transform 1.1s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform;
 }
 
 .venue-card:hover .card-image-wrap::after {
-  left: 150%;
+  transform: translateX(520%) skewX(-20deg);
 }
 
 .venue-image {
@@ -2076,28 +2245,6 @@ watch(() => props.detailId, (newId) => {
   height: 100%;
   object-fit: cover;
   transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.card-tap-overlay {
-  position: absolute;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.6);
-  backdrop-filter: blur(4px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-
-.card-tap-overlay span {
-  background: #fff;
-  color: #000;
-  padding: 0.6rem 1.4rem;
-  border-radius: 100px;
-  font-size: 0.75rem;
-  font-weight: 800;
-  letter-spacing: 0.5px;
 }
 
 .card-body {
@@ -2183,44 +2330,41 @@ watch(() => props.detailId, (newId) => {
 }
 
 .card-footer {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0.6rem 0 0 0;
-  background: transparent;
-  border-top: none;
+  display: none;
 }
 
 .category-badge {
-  display: flex;
+  position: absolute;
+  left: 0;
+  top: 0.8rem;
+  display: inline-flex;
   align-items: center;
-  gap: 0.3rem;
-  background: rgba(59, 130, 246, 0.08);
-  border: 1px solid rgba(59, 130, 246, 0.15);
-  color: #60a5fa;
-  padding: 0.25rem 0.7rem;
-  border-radius: 100px;
-  font-size: 0.65rem;
-  font-weight: 600;
+  background: #fff;
+  border: none;
+  color: #000;
+  padding: 0.35rem 0.9rem 0.35rem 0.7rem;
+  border-radius: 0 100px 100px 0;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  line-height: 1;
+  white-space: nowrap;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.3);
+  z-index: 3;
+}
+
+.category-badge::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 100%;
+  border-width: 6px 7px 0 0;
+  border-style: solid;
+  border-color: rgba(0,0,0,0.55) transparent transparent transparent;
 }
 
 .icon-tag {
-  width: 11px;
-  height: 11px;
-}
-
-.rating-badge {
-  display: flex;
-  align-items: center;
-  gap: 0.3rem;
-  color: #fbbf24;
-  font-size: 0.75rem;
-  font-weight: 700;
-}
-
-.icon-star {
-  width: 12px;
-  height: 12px;
+  display: none;
 }
 
 .venue-detail-container {
@@ -2252,6 +2396,8 @@ watch(() => props.detailId, (newId) => {
 .detail-header {
   margin-top: 1.5rem;
   margin-bottom: 1.25rem;
+  min-width: 0;
+  max-width: 100%;
 }
 
 .venue-type-tag {
@@ -2273,6 +2419,11 @@ watch(() => props.detailId, (newId) => {
   text-transform: uppercase;
   font-family: var(--font-body);
   letter-spacing: -1px;
+  display: block;
+  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 /* Gallery + Host Row Layout */
@@ -4631,17 +4782,22 @@ watch(() => props.detailId, (newId) => {
   display: none; /* Only visible in mobile layout */
 }
 
-/* ── GALLERY MODAL ──────────────── */
+/* ── GALLERY LIGHTBOX (fullscreen slider) ──────────────── */
+.gallery-lightbox-overlay {
+  padding: 0;
+}
+
 .gallery-modal-card {
-  background: #18181b;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 20px;
-  width: min(90vw, 760px);
-  max-height: 85vh;
+  background: rgba(9, 9, 11, 0.98);
+  border: none;
+  border-radius: 0;
+  width: 100vw;
+  height: 100dvh;
+  max-height: 100dvh;
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6);
+  box-shadow: none;
   animation: fadeIn 0.25s ease-out;
 }
 
@@ -4649,76 +4805,144 @@ watch(() => props.detailId, (newId) => {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 1rem 1.25rem;
+  gap: 1rem;
+  padding: 1rem clamp(1rem, 4vw, 2.5rem);
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   flex-shrink: 0;
 }
 
 .gallery-modal-header h3 {
   font-family: var(--font-body);
-  font-size: 0.85rem;
+  font-size: clamp(0.72rem, 2.5vw, 0.9rem);
   font-weight: 800;
   color: #ffffff;
   letter-spacing: 0.5px;
   margin: 0;
   text-transform: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .btn-close-gallery {
   background: rgba(255, 255, 255, 0.06);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 50%;
-  width: 34px;
-  height: 34px;
+  width: 38px;
+  height: 38px;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: background 0.25s, transform 0.25s;
   flex-shrink: 0;
 }
 
 .btn-close-gallery:hover {
-  background: rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.14);
+  transform: scale(1.05);
 }
 
-.gallery-modal-scroll {
-  overflow-y: auto;
+.gallery-lightbox-stage {
+  position: relative;
   flex: 1;
-  padding: 1rem 1.25rem;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(0.75rem, 3vw, 2rem) clamp(3.2rem, 8vw, 5.5rem);
+}
+
+.gallery-lightbox-img {
+  width: min(100%, 1100px);
+  height: 100%;
+  max-height: 72dvh;
+  object-fit: contain;
+  border-radius: 12px;
+  background: #000;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.55);
+  animation: galleryFadeSlide 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+@keyframes galleryFadeSlide {
+  from { opacity: 0; transform: scale(0.985) translateY(6px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.gallery-nav-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: clamp(40px, 6vw, 52px);
+  height: clamp(40px, 6vw, 52px);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  color: #fff;
+  cursor: pointer;
+  transition: background 0.25s, transform 0.25s;
+  z-index: 2;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+.gallery-nav-btn.prev { left: clamp(0.6rem, 3vw, 2rem); }
+.gallery-nav-btn.next { right: clamp(0.6rem, 3vw, 2rem); }
+
+.gallery-nav-btn:hover {
+  background: rgba(255, 255, 255, 0.18);
+  transform: translateY(-50%) scale(1.06);
+}
+
+.gallery-nav-btn:active {
+  transform: translateY(-50%) scale(0.96);
+}
+
+.gallery-lightbox-thumbs {
+  display: flex;
+  gap: 0.55rem;
+  padding: 0.9rem clamp(1rem, 4vw, 2.5rem) 1.2rem;
+  overflow-x: auto;
+  flex-shrink: 0;
   scrollbar-width: thin;
-  scrollbar-color: rgba(255,255,255,0.1) transparent;
+  scrollbar-color: rgba(255,255,255,0.15) transparent;
+  justify-content: flex-start;
 }
 
-.gallery-modal-scroll::-webkit-scrollbar {
-  width: 4px;
-}
-
-.gallery-modal-scroll::-webkit-scrollbar-thumb {
-  background: rgba(255,255,255,0.12);
+.gallery-lightbox-thumbs::-webkit-scrollbar { height: 4px; }
+.gallery-lightbox-thumbs::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,0.15);
   border-radius: 4px;
 }
 
-.gallery-modal-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 0.6rem;
-}
-
-.gallery-modal-img {
-  width: 100%;
-  aspect-ratio: 4/3;
+.gallery-lightbox-thumb {
+  width: clamp(56px, 12vw, 84px);
+  height: clamp(40px, 8vw, 60px);
   object-fit: cover;
   border-radius: 8px;
-  cursor: zoom-in;
-  transition: transform 0.2s, opacity 0.2s;
-  border: 1px solid rgba(255,255,255,0.06);
+  cursor: pointer;
+  opacity: 0.45;
+  border: 2px solid transparent;
+  transition: opacity 0.25s, border-color 0.25s, transform 0.25s;
+  flex-shrink: 0;
 }
 
-.gallery-modal-img:hover {
-  transform: scale(1.02);
-  opacity: 0.9;
+.gallery-lightbox-thumb:hover { opacity: 0.85; }
+.gallery-lightbox-thumb.active {
+  opacity: 1;
+  border-color: #fff;
+  transform: scale(1.04);
 }
+
+/* Legacy grid/modal classes kept harmless (unused by new lightbox) */
+.gallery-modal-scroll { display: none; }
+.gallery-modal-grid { display: none; }
+.gallery-modal-img { display: none; }
 
 /* Success Confirmation Overlay */
 .success-overlay {
@@ -4915,6 +5139,13 @@ watch(() => props.detailId, (newId) => {
 }
 
 /* ── RESPONSIVE DESIGN (All Devices) ──────── */
+
+@media (min-width: 1280px) {
+  .venue-title { font-size: 1.05rem; }
+  .location-text { font-size: 0.85rem; }
+  .price-row { font-size: 0.9rem; }
+  .gallery-lightbox-img { width: min(100%, 1200px); max-height: 76dvh; }
+}
 
 /* Tablet and Smaller Screen adjustments */
 @media (max-width: 992px) {
@@ -5147,6 +5378,22 @@ watch(() => props.detailId, (newId) => {
     gap: 0.7rem;
   }
 
+  .venue-title-container { overflow: hidden; white-space: nowrap; }
+  .venue-title { font-size: 1rem; white-space: nowrap; }
+  .marquee-track { display: inline-flex; white-space: nowrap; }
+  .marquee-track.animate-marquee { animation: marquee-loop 12s linear infinite; }
+  .marquee-track.animate-marquee .venue-title { padding-right: 3rem; }
+  .venue-main-title {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .desc-venue-title {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
   .gallery-grid {
     grid-template-columns: 1fr 1fr;
     grid-template-rows: repeat(3, 90px);
@@ -5175,6 +5422,19 @@ watch(() => props.detailId, (newId) => {
   .gallery-small-4 {
     grid-column: 2 / 3;
     grid-row: 3 / 4;
+  }
+
+  .btn-more-photos {
+    padding: 0;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    gap: 0;
+    justify-content: center;
+  }
+
+  .btn-more-photos span {
+    display: none;
   }
 
   .rules-grid {
@@ -5351,6 +5611,43 @@ watch(() => props.detailId, (newId) => {
     min-width: 260px;
     max-width: 280px;
   }
+
+  .venue-grid:has(> :only-child) { grid-template-columns: minmax(0, 400px); justify-content: center; }
+  .card-image-wrap { aspect-ratio: 16 / 9; border-radius: 8px; }
+  .venue-title-container { overflow: hidden; white-space: nowrap; }
+  .venue-title { font-size: 1rem; white-space: nowrap; overflow: visible; text-overflow: clip; }
+  .marquee-track { display: inline-flex; white-space: nowrap; }
+  .marquee-track.animate-marquee { animation: marquee-loop 12s linear infinite; }
+  .marquee-track.animate-marquee .venue-title { padding-right: 3rem; }
+  .venue-main-title {
+    font-size: 1.6rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .desc-venue-title {
+    font-size: 1.4rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .location-text { font-size: 0.85rem; }
+  .price-row { font-size: 0.9rem; }
+
+  .gallery-lightbox-stage { padding: 0.75rem 0.75rem 0.5rem; }
+  .gallery-lightbox-img { max-height: 62dvh; border-radius: 10px; }
+  .gallery-nav-btn {
+    top: auto;
+    bottom: 0.9rem;
+    transform: none;
+    width: 44px;
+    height: 44px;
+  }
+  .gallery-nav-btn.prev { left: 1rem; }
+  .gallery-nav-btn.next { right: 1rem; }
+  .gallery-nav-btn:hover { transform: scale(1.06); }
+  .gallery-nav-btn:active { transform: scale(0.96); }
+  .gallery-lightbox-thumbs { padding: 0.7rem 1rem calc(4.2rem + env(safe-area-inset-bottom)); }
 
   .gallery-modal-grid {
     grid-template-columns: repeat(2, 1fr);

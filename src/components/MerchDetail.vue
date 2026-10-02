@@ -17,6 +17,7 @@ const errorMessage = ref('');
 // E-commerce detail layout states
 const activeIndex = ref(0);
 const activeTab = ref('desc');
+const isDescExpanded = ref(false);
 const selectedSize = ref('S');
 const purchaseQty = ref(1);
 const isWishlisted = ref(false);
@@ -42,11 +43,7 @@ const buyNow = () => {
 };
 
 const getCreatorImage = (item: any) => {
-  const url = item.creator?.image_url || item.creator?.image || '';
-  if (!url || url.endsWith('/creator') || url.endsWith('/creator/')) {
-    return `https://ui-avatars.com/api/?name=${encodeURIComponent(item.creator?.name || 'Mocca')}&background=ff5e81&color=fff&bold=true&rounded=true`;
-  }
-  return url;
+  return item.creator?.image_url || item.creator?.image || '';
 };
 
 const fetchItemDetails = async (slug: string) => {
@@ -312,7 +309,11 @@ watch(() => props.slug, (newSlug) => {
             </div>
             
             <div class="tab-content" v-if="activeTab === 'desc'">
-              <div class="product-description" v-html="cleanDescription"></div>
+              <div class="product-description" :class="{ collapsed: !isDescExpanded }" v-html="cleanDescription"></div>
+              <button class="btn-read-more" @click="isDescExpanded = !isDescExpanded">
+                {{ isDescExpanded ? 'Tutup' : 'Baca selengkapnya' }}
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"><path :d="isDescExpanded ? 'M18 15l-6-6-6 6' : 'M6 9l6 6 6-6'"/></svg>
+              </button>
               
               <div class="specifications-list" v-if="item.category === 'APPAREL'">
                 <div class="specs-title">Detail Produk :</div>
@@ -687,6 +688,30 @@ watch(() => props.slug, (newSlug) => {
   font-size: 0.9rem;
   color: var(--text-muted);
   line-height: 1.6;
+}
+
+.product-description.collapsed {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.btn-read-more {
+  background: transparent;
+  border: none;
+  color: #fff;
+  font-size: 0.85rem;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  cursor: pointer;
+  padding: 0.6rem 0 0;
+}
+
+.btn-read-more:hover {
+  text-decoration: underline;
 }
 
 .specifications-list {

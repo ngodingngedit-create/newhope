@@ -1,17 +1,13 @@
 <script setup lang="ts">
 import { onMounted } from 'vue';
-import { merchItems, isLoading, hasError, errorMessage, fetchMerchItems, increaseQty, decreaseQty, navigateTo } from '../store';
+import { merchItems, isLoading, hasError, errorMessage, fetchMerchItems, navigateTo } from '../store';
 
 const formatPrice = (price: number) => {
   return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 };
 
 const getCreatorImage = (item: any) => {
-  const url = item.creator?.image_url || item.creator?.image || '';
-  if (!url || url.endsWith('/creator') || url.endsWith('/creator/')) {
-    return `https://ui-avatars.com/api/?name=${encodeURIComponent(item.creator?.name || 'Store')}&background=ff5e81&color=fff&bold=true&rounded=true`;
-  }
-  return url;
+  return item.creator?.image_url || item.creator?.image || '';
 };
 
 const navigateToDetail = (slug: string) => {
@@ -80,31 +76,22 @@ onMounted(() => {
             </div>
           </div>
           <div class="card-content-bw">
-            <span class="card-tag">{{ item.category }}</span>
             <h3 class="card-title">{{ item.name }}</h3>
+            <div class="card-shop-row">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3" fill="#000"/></svg>
+              <span>{{ item.creator.name.endsWith('Shop') ? item.creator.name : item.creator.name + ' Shop' }}</span>
+            </div>
             <div class="card-bottom">
-              <!-- Top-right portion: Price & Quantity selector -->
-              <div class="price-quantity-wrapper">
-                <div class="p-amount-wrapper">
-                  <div class="p-amount-white">Rp {{ formatPrice(item.price) }}</div>
-                  <div v-if="item.originalPrice" class="p-amount-original">Rp {{ formatPrice(item.originalPrice) }}</div>
-                </div>
-                
-                <div class="quantity-selector" @click.stop v-if="!item.isSoldOut">
-                  <button class="qty-btn" @click="decreaseQty(item)" :disabled="item.quantity === 0" aria-label="Decrease quantity">−</button>
-                  <span class="qty-num">{{ item.quantity || 0 }}</span>
-                  <button class="qty-btn" @click="increaseQty(item)" aria-label="Increase quantity">+</button>
-                </div>
-                <div class="sold-out-text" v-else>OUT OF STOCK</div>
-              </div>
-
-              <!-- Bottom-left portion: Creator section -->
               <div class="card-creator">
                 <img :src="getCreatorImage(item)" :alt="item.creator.name" class="creator-avatar" />
                 <div class="creator-info">
-                  <span class="creator-label">Official Store</span>
+                  <span class="creator-label">Disediakan oleh</span>
                   <span class="creator-name">{{ item.creator.name }}</span>
                 </div>
+              </div>
+              <div class="p-amount-wrapper">
+                <div class="p-amount-white">Rp {{ formatPrice(item.price) }}</div>
+                <div v-if="item.originalPrice" class="p-amount-original">Rp {{ formatPrice(item.originalPrice) }}</div>
               </div>
             </div>
           </div>
@@ -114,7 +101,7 @@ onMounted(() => {
       <!-- Button Lihat Semua -->
       <div class="view-all-wrapper" v-if="!isLoading && !hasError && merchItems.length > 4">
         <button class="btn-view-all" @click="viewAllMerchandise">
-          <span>LIHAT SEMUA MERCHANDISE</span>
+          <span>LIHAT SEMUA</span>
           <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 12h14m-7-7l7 7-7 7"/></svg>
         </button>
       </div>
@@ -196,16 +183,19 @@ onMounted(() => {
   flex: 0 0 300px;
   cursor: pointer;
   transition: all 0.4s ease;
+  background: #101013;
+  border-radius: 8px;
+  overflow: hidden;
 }
 
 .card-image-wrap {
   position: relative;
   aspect-ratio: 4/5;
   background-color: #0c0c0c;
-  border-radius: 8px;
+  border-radius: 8px 8px 0 0;
   overflow: hidden;
-  margin-bottom: 1.5rem;
-  border: 1px solid rgba(255,255,255,0.05);
+  margin-bottom: 0;
+  border: none;
 }
 
 .card-image-wrap img {
@@ -266,28 +256,47 @@ onMounted(() => {
 
 .card-bw:hover .card-tap-overlay { opacity: 1; }
 
-.card-tag {
-  font-size: 0.65rem;
-  color: #444;
-  font-weight: 800;
-  letter-spacing: 2px;
-  margin-bottom: 0.5rem;
-  display: block;
+.card-content-bw {
+  background: #101013;
+  border-radius: 0 0 8px 8px;
+  padding: 1rem 1.1rem 1.1rem;
 }
 
 .card-title {
-  font-size: 1.15rem;
-  font-weight: 600;
-  margin-bottom: 1.25rem;
+  font-size: 1.05rem;
+  font-weight: 800;
+  margin: 0 0 0.5rem;
   line-height: 1.25;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-transform: uppercase;
+}
+
+.card-shop-row {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #fff;
+  margin-bottom: 0.9rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.card-shop-row svg {
+  flex-shrink: 0;
 }
 
 .card-bottom {
   display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  padding-top: 1.25rem;
-  border-top: 1px solid #111;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 0.9rem;
+  border-top: 1px dashed rgba(255,255,255,0.15);
   gap: 0.75rem;
   width: 100%;
 }
@@ -296,16 +305,17 @@ onMounted(() => {
   display: flex;
   align-items: center;
   gap: 0.6rem;
-  align-self: flex-start;
   min-width: 0;
+  flex: 1;
 }
 
 .creator-avatar {
-  width: 32px;
-  height: 32px;
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
   object-fit: cover;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: none;
+  background: #fff;
   flex-shrink: 0;
 }
 
@@ -313,45 +323,37 @@ onMounted(() => {
   display: flex;
   flex-direction: column;
   min-width: 0;
+  line-height: 1.2;
 }
 
 .creator-label {
-  font-size: 0.65rem;
-  color: #555;
+  font-size: 0.72rem;
+  color: #71717a;
   font-weight: 500;
-  line-height: 1.25;
 }
 
 .creator-name {
-  font-size: 0.8rem;
+  font-size: 0.88rem;
   color: #fff;
-  font-weight: 750;
-  line-height: 1.25;
+  font-weight: 800;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  text-transform: capitalize;
-}
-
-.price-quantity-wrapper {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 0.4rem;
-  width: 100%;
 }
 
 .p-amount-wrapper {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
+  flex-shrink: 0;
 }
 
 .p-amount-white {
-  font-size: 1.05rem;
+  font-size: 1.1rem;
   color: #ffffff;
   font-weight: 700;
   line-height: 1.2;
+  white-space: nowrap;
 }
 
 .p-amount-original {
@@ -360,51 +362,6 @@ onMounted(() => {
   text-decoration: line-through;
   line-height: 1.2;
   margin-top: 0.1rem;
-}
-
-.quantity-selector {
-  display: flex;
-  align-items: center;
-  background: #141414;
-  border: 1px solid #27272a;
-  border-radius: 100px;
-  padding: 2px 6px;
-  gap: 0.5rem;
-}
-
-.qty-btn {
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: transparent;
-  color: #ffffff;
-  border: none;
-  font-size: 0.85rem;
-  font-weight: bold;
-  cursor: pointer;
-  transition: all 0.2s;
-  padding: 0;
-}
-
-.qty-btn:hover:not(:disabled) {
-  background: #27272a;
-}
-
-.qty-btn:disabled {
-  color: #555;
-  cursor: not-allowed;
-}
-
-.qty-num {
-  font-size: 0.8rem;
-  color: #ffffff;
-  font-weight: 600;
-  min-width: 14px;
-  text-align: center;
-  user-select: none;
 }
 
 .sold-out-text {
@@ -537,8 +494,17 @@ onMounted(() => {
 @media (max-width: 640px) {
   .merch-bw-section { padding: 1.5rem 0; }
   .title-display { font-size: 1.6rem; }
+  .view-all-wrapper { margin-top: 2rem; }
+  .btn-view-all {
+    padding: 0.6rem 1.2rem;
+    font-size: 0.65rem;
+    letter-spacing: 1px;
+    gap: 0.5rem;
+  }
+  .btn-view-all svg { width: 13px; height: 13px; }
   
   .card-title { font-size: 0.9rem; }
+  .card-shop-row { font-size: 0.75rem; }
   .p-amount-white { font-size: 0.85rem; }
   
   .card-bottom {
@@ -555,36 +521,12 @@ onMounted(() => {
   .creator-name {
     font-size: 0.7rem;
   }
-  
-  .quantity-selector {
-    padding: 4px 10px;
-    gap: 0.6rem;
-  }
-  .qty-btn {
-    width: 26px;
-    height: 26px;
-    font-size: 1rem;
-  }
-  .qty-num {
-    font-size: 0.9rem;
-    min-width: 16px;
-  }
 }
 
 @media (max-width: 480px) {
   .card-bottom {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.6rem;
-  }
-  .price-quantity-wrapper {
-    flex-direction: column;
-    align-items: flex-end;
-    justify-content: flex-end;
-    width: 100%;
-    gap: 0.5rem;
-    border-top: 1px dashed rgba(255, 255, 255, 0.05);
-    padding-top: 0.5rem;
+    flex-direction: row;
+    align-items: center;
   }
   .p-amount-wrapper {
     align-items: flex-end;

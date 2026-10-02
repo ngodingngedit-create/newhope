@@ -1,8 +1,9 @@
 <template>
-  <nav class="mobile-nav" v-if="isMobile && !hideMobileNavGlobal">
+  <transition name="mobile-nav-hide">
+    <nav class="mobile-nav" v-show="isMobile && !shouldHide">
     <div class="mobile-nav-container">
       <a href="#beranda" class="mobile-nav-item" :class="{ active: activePath === '#beranda' }" @click.prevent="goToHome">
-        <img src="/logo.png" alt="Newhope" class="mobile-nav-logo" />
+        <img src="/NEWHOPE ARENA WHITE.webp" alt="Newhope" class="mobile-nav-logo" />
         <span class="dot"></span>
       </a>
       
@@ -24,18 +25,25 @@
         <span class="dot"></span>
       </a>
 
+      <a href="#gallery" class="mobile-nav-item" :class="{ active: activePath === '#gallery' }" @click.prevent="goToGallery">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+        <span class="dot"></span>
+      </a>
+
 
     </div>
-  </nav>
+    </nav>
+  </transition>
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue';
-import { navigateTo, hideMobileNavGlobal } from '../store';
+import { ref, computed, onMounted, onUnmounted } from 'vue';
+import { navigateTo, hideMobileNavGlobal, isMobileDrawerOpen, isCartOpen } from '../store';
 
 
 const isMobile = ref(false);
 const activePath = ref('#beranda');
+const shouldHide = computed(() => hideMobileNavGlobal.value || isMobileDrawerOpen.value || isCartOpen.value);
 
 const checkIfMobile = () => {
   isMobile.value = window.innerWidth <= 768;
@@ -55,7 +63,7 @@ const handleScroll = () => {
     activePath.value = '#merch';
     return;
   }
-  const sections = ['beranda', 'merch', 'venue', 'tentang'];
+  const sections = ['beranda', 'merch', 'venue', 'tentang', 'gallery'];
   for (const section of sections) {
     const el = document.getElementById(section);
     if (el) {
@@ -103,6 +111,18 @@ const goToTiket = () => {
     }, 100);
   } else {
     document.getElementById('tentang')?.scrollIntoView({ behavior: 'smooth' });
+  }
+};
+
+const goToGallery = () => {
+  setActive('#gallery');
+  if (window.location.pathname !== '/') {
+    navigateTo('/');
+    setTimeout(() => {
+      document.getElementById('gallery')?.scrollIntoView({ behavior: 'smooth' });
+    }, 100);
+  } else {
+    document.getElementById('gallery')?.scrollIntoView({ behavior: 'smooth' });
   }
 };
 
@@ -231,6 +251,16 @@ onUnmounted(() => {
     opacity: 1;
     transform: translate(-50%, 0);
   }
+}
+
+.mobile-nav-hide-enter-active,
+.mobile-nav-hide-leave-active {
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+.mobile-nav-hide-enter-from,
+.mobile-nav-hide-leave-to {
+  opacity: 0;
+  transform: translateX(-50%) translateY(24px);
 }
 
 /* Responsive adjustment */

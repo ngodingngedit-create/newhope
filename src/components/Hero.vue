@@ -10,7 +10,7 @@
 
       <!-- Logo -->
       <div class="logo-container">
-        <img src="/logo.png" alt="Newhope Logo" class="hero-logo" />
+        <img src="/NEWHOPE ARENA WHITE.webp" alt="Newhope Logo" class="hero-logo" />
       </div>
 
       <!-- Event tagline -->
@@ -157,7 +157,7 @@
 
 .hero-logo {
   width: 100%;
-  max-width: 900px; /* Logo diperbesar tapi proporsional */
+  max-width: 460px; /* Logo diperbesar tapi proporsional */
   height: auto;
   object-fit: contain;
   object-position: center;
@@ -401,7 +401,7 @@
 
   .hero-logo {
     width: 100%;
-    max-width: 320px;
+    max-width: 180px;
     margin-top: 0;
     margin-bottom: 20px;
   }
